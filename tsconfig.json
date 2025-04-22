@@ -1,0 +1,8 @@
+{
+  "extends": "../tsconfig.base.json",
+  "include": ["src", "../shared"],
+  "exclude": ["node_modules", "dist", "build"],
+  "compilerOptions": {
+    "types": ["vite/client"]
+  }
+}
