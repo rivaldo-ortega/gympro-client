@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react'
 import themePlugin from '@replit/vite-plugin-shadcn-theme-json'
 import path from 'path'
 import runtimeErrorOverlay from '@replit/vite-plugin-runtime-error-modal'
-console.log('VITE_API_URL', process.env.VITE_API_URL)
 
 export default defineConfig({
   plugins: [
@@ -31,4 +30,5 @@ export default defineConfig({
     outDir: path.resolve(__dirname, './dist/public'),
     emptyOutDir: true,
   },
+  base: './',
 })
