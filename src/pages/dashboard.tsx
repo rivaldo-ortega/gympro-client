@@ -55,17 +55,7 @@ export default function Dashboard() {
     },
   })
 
-  // Fetch active announcements
-  const {data: announcements = [], isLoading: isLoadingAnnouncements} =
-    useQuery({
-      queryKey: ['/api/announcements'],
-      queryFn: async () => {
-        const res = await fetch('/api/announcements?active=true')
-        if (!res.ok) throw new Error('Failed to fetch announcements')
-        return res.json()
-      },
-    })
-
+ 
   // Fetch today's classes
   const {data: todayClasses = [], isLoading: isLoadingClasses} = useQuery({
     queryKey: ['/api/classes/today'],
@@ -323,7 +313,7 @@ export default function Dashboard() {
       {/* Recent Activity & Announcements */}
       <div className='mt-8 grid grid-cols-1 gap-6 animate-slide-in'>
         {/* Recent Activity */}
-        <Card className='lg:col-span-2'>
+        {/* <Card className='lg:col-span-2'>
           <CardHeader className='px-6 py-5 border-b border-gray-200 flex flex-row items-center justify-between'>
             <CardTitle className='text-lg font-medium'>
               {t('recentActivity')}
@@ -377,7 +367,7 @@ export default function Dashboard() {
               </ul>
             )}
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Announcements */}
         {/* <Card>
