@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/select'
 import {Switch} from '@/components/ui/switch'
 import {X, Plus} from 'lucide-react'
+import useTranslation from '@/hooks/use-translation'
 
 // Extended schema with additional validations
 const planFormSchema = z.object({
@@ -59,6 +60,8 @@ export function PlanForm({initialData, onSuccess, onCancel}: PlanFormProps) {
   )
   const [newFeature, setNewFeature] = useState('')
   const isEditing = !!initialData
+
+  const {t} = useTranslation()
 
   // Default values for the form
   const defaultValues: Partial<FormValues> = {
@@ -146,7 +149,7 @@ export function PlanForm({initialData, onSuccess, onCancel}: PlanFormProps) {
             name='name'
             render={({field}) => (
               <FormItem>
-                <FormLabel>Plan Name</FormLabel>
+                <FormLabel>{t('planName')}</FormLabel>
                 <FormControl>
                   <Input placeholder='Plan Name' {...field} />
                 </FormControl>
@@ -160,7 +163,7 @@ export function PlanForm({initialData, onSuccess, onCancel}: PlanFormProps) {
             name='price'
             render={({field}) => (
               <FormItem>
-                <FormLabel>Price ($)</FormLabel>
+                <FormLabel>{t('price')} (S/.)</FormLabel>
                 <FormControl>
                   <Input
                     type='number'
@@ -183,7 +186,7 @@ export function PlanForm({initialData, onSuccess, onCancel}: PlanFormProps) {
             name='duration'
             render={({field}) => (
               <FormItem>
-                <FormLabel>Duration</FormLabel>
+                <FormLabel>{t('duration')}</FormLabel>
                 <FormControl>
                   <Input type='number' min='1' placeholder='30' {...field} />
                 </FormControl>
@@ -197,7 +200,7 @@ export function PlanForm({initialData, onSuccess, onCancel}: PlanFormProps) {
             name='durationType'
             render={({field}) => (
               <FormItem>
-                <FormLabel>Duration Type</FormLabel>
+                <FormLabel>{t('durationType')}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -225,7 +228,7 @@ export function PlanForm({initialData, onSuccess, onCancel}: PlanFormProps) {
             name='description'
             render={({field}) => (
               <FormItem className='md:col-span-2'>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>{t('description')}</FormLabel>
                 <FormControl>
                   <Textarea
                     placeholder='Description of the membership plan'
@@ -239,7 +242,7 @@ export function PlanForm({initialData, onSuccess, onCancel}: PlanFormProps) {
           />
 
           <div className='md:col-span-2'>
-            <FormLabel>Plan Features</FormLabel>
+            <FormLabel>{t('planFeatures')}</FormLabel>
             <div className='flex mt-1 mb-2'>
               <Input
                 placeholder='Add a feature'
@@ -260,7 +263,7 @@ export function PlanForm({initialData, onSuccess, onCancel}: PlanFormProps) {
                 variant='secondary'
               >
                 <Plus className='h-4 w-4 mr-1' />
-                Add
+                {t('add')}
               </Button>
             </div>
 
@@ -296,7 +299,7 @@ export function PlanForm({initialData, onSuccess, onCancel}: PlanFormProps) {
             render={({field}) => (
               <FormItem className='flex flex-row items-center justify-between space-x-2 rounded-md border p-4'>
                 <div className='space-y-0.5'>
-                  <FormLabel>Active Status</FormLabel>
+                  <FormLabel>{t('activeStatus')}</FormLabel>
                   <FormDescription>
                     Whether this plan is available for new members
                   </FormDescription>
@@ -314,7 +317,7 @@ export function PlanForm({initialData, onSuccess, onCancel}: PlanFormProps) {
 
         <div className='flex justify-end space-x-4'>
           <Button variant='outline' type='button' onClick={onCancel}>
-            Cancel
+            {t('cancel')}
           </Button>
           <Button type='submit' disabled={isSubmitting}>
             {isSubmitting

@@ -33,6 +33,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import {MemberForm} from '@/components/members/member-form'
+import { formatDate } from '@/lib/utils'
 
 export default function Dashboard() {
   const [, navigate] = useLocation()
@@ -125,13 +126,7 @@ export default function Dashboard() {
     {
       header: t('joinDate'),
       accessorKey: (member: any) => (
-        <span className='text-sm text-gray-500'>
-          {new Date(member.joinDate).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          })}
-        </span>
+        <span className='text-sm text-gray-500'>{formatDate(member.joinDate)}</span>
       ),
     },
     {

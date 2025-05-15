@@ -25,6 +25,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useQuery } from "@tanstack/react-query";
+import useTranslation from "@/hooks/use-translation";
 
 // Extended schema with additional validations
 const classFormSchema = z.object({
@@ -61,13 +62,13 @@ interface ClassFormProps {
 }
 
 const daysOfWeek = [
-  { id: "Monday", label: "Monday" },
-  { id: "Tuesday", label: "Tuesday" },
-  { id: "Wednesday", label: "Wednesday" },
-  { id: "Thursday", label: "Thursday" },
-  { id: "Friday", label: "Friday" },
-  { id: "Saturday", label: "Saturday" },
-  { id: "Sunday", label: "Sunday" },
+  { id: "Monday", label: "Lunes" },
+  { id: "Tuesday", label: "Martes" },
+  { id: "Wednesday", label: "Miercoles" },
+  { id: "Thursday", label: "Jueves" },
+  { id: "Friday", label: "Viernes" },
+  { id: "Saturday", label: "Sabado" },
+  { id: "Sunday", label: "Domingo" },
 ];
 
 // Helper to format time for input fields
@@ -81,6 +82,8 @@ export function ClassForm({ initialData, onSuccess, onCancel }: ClassFormProps) 
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditing = !!initialData;
+
+  const {t} = useTranslation();
 
   // Fetch trainers for the dropdown
   const { data: trainers = [], isLoading: isLoadingTrainers } = useQuery({
@@ -148,41 +151,44 @@ export function ClassForm({ initialData, onSuccess, onCancel }: ClassFormProps) 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
           <FormField
             control={form.control}
-            name="name"
-            render={({ field }) => (
+            name='name'
+            render={({field}) => (
               <FormItem>
-                <FormLabel>Class Name</FormLabel>
+                <FormLabel>{t('className')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Class Name" {...field} />
+                  <Input placeholder='Class Name' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
-            name="trainerId"
-            render={({ field }) => (
+            name='trainerId'
+            render={({field}) => (
               <FormItem>
-                <FormLabel>Trainer</FormLabel>
-                <Select 
-                  onValueChange={(value) => field.onChange(parseInt(value))} 
+                <FormLabel>{t('trainer')}</FormLabel>
+                <Select
+                  onValueChange={value => field.onChange(parseInt(value))}
                   defaultValue={field.value?.toString()}
                   disabled={isLoadingTrainers}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a trainer" />
+                      <SelectValue placeholder='Select a trainer' />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {trainers.map((trainer: any) => (
-                      <SelectItem key={trainer.id} value={trainer.id.toString()}>
+                      <SelectItem
+                        key={trainer.id}
+                        value={trainer.id.toString()}
+                      >
                         {`${trainer.firstName} ${trainer.lastName}`}
                       </SelectItem>
                     ))}
@@ -192,73 +198,73 @@ export function ClassForm({ initialData, onSuccess, onCancel }: ClassFormProps) 
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
-            name="room"
-            render={({ field }) => (
+            name='room'
+            render={({field}) => (
               <FormItem>
-                <FormLabel>Room</FormLabel>
+                <FormLabel>{t('room')}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Room" {...field} />
+                  <Input placeholder='Room' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
-            name="capacity"
-            render={({ field }) => (
+            name='capacity'
+            render={({field}) => (
               <FormItem>
-                <FormLabel>Capacity</FormLabel>
+                <FormLabel>{t('capacity')}</FormLabel>
                 <FormControl>
-                  <Input type="number" min="1" {...field} />
+                  <Input type='number' min='1' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
-            name="startTime"
-            render={({ field }) => (
+            name='startTime'
+            render={({field}) => (
               <FormItem>
-                <FormLabel>Start Time</FormLabel>
+                <FormLabel>{t('startTime')}</FormLabel>
                 <FormControl>
-                  <Input type="time" {...field} />
+                  <Input type='time' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
-            name="endTime"
-            render={({ field }) => (
+            name='endTime'
+            render={({field}) => (
               <FormItem>
-                <FormLabel>End Time</FormLabel>
+                <FormLabel>{t('endTime')}</FormLabel>
                 <FormControl>
-                  <Input type="time" {...field} />
+                  <Input type='time' {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          
+
           <FormField
             control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>Description</FormLabel>
+            name='description'
+            render={({field}) => (
+              <FormItem className='md:col-span-2'>
+                <FormLabel>{t('description')}</FormLabel>
                 <FormControl>
-                  <Textarea 
-                    placeholder="Description of the class"
-                    className="h-24 resize-none"
+                  <Textarea
+                    placeholder='Description of the class'
+                    className='h-24 resize-none'
                     {...field}
                   />
                 </FormControl>
@@ -266,39 +272,39 @@ export function ClassForm({ initialData, onSuccess, onCancel }: ClassFormProps) 
               </FormItem>
             )}
           />
-          
-          <div className="md:col-span-2 space-y-3">
-            <FormLabel className="block">Days of Week</FormLabel>
-            {daysOfWeek.map((day) => (
+
+          <div className='md:col-span-2 space-y-3'>
+            <FormLabel className='block'>{t('daysOfTheWeek')}</FormLabel>
+            {daysOfWeek.map(day => (
               <FormField
                 key={day.id}
                 control={form.control}
-                name="daysOfWeek"
-                render={({ field }) => {
+                name='daysOfWeek'
+                render={({field}) => {
                   return (
                     <FormItem
                       key={day.id}
-                      className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-3"
+                      className='flex flex-row items-start space-x-3 space-y-0 rounded-md border p-3'
                     >
                       <FormControl>
                         <Checkbox
                           checked={field.value?.includes(day.id)}
-                          onCheckedChange={(checked) => {
+                          onCheckedChange={checked => {
                             return checked
                               ? field.onChange([...field.value, day.id])
                               : field.onChange(
                                   field.value?.filter(
-                                    (value) => value !== day.id
-                                  )
-                                );
+                                    value => value !== day.id,
+                                  ),
+                                )
                           }}
                         />
                       </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
+                      <FormLabel className='font-normal cursor-pointer'>
                         {day.label}
                       </FormLabel>
                     </FormItem>
-                  );
+                  )
                 }}
               />
             ))}
@@ -306,12 +312,12 @@ export function ClassForm({ initialData, onSuccess, onCancel }: ClassFormProps) 
               {form.formState.errors.daysOfWeek?.message}
             </FormMessage>
           </div>
-          
+
           <FormField
             control={form.control}
-            name="isActive"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between space-x-2 rounded-md border p-4">
+            name='isActive'
+            render={({field}) => (
+              <FormItem className='flex flex-row items-center justify-between space-x-2 rounded-md border p-4'>
                 <FormLabel>Active Status</FormLabel>
                 <FormControl>
                   <Switch
@@ -323,16 +329,20 @@ export function ClassForm({ initialData, onSuccess, onCancel }: ClassFormProps) 
             )}
           />
         </div>
-        
-        <div className="flex justify-end space-x-4">
-          <Button variant="outline" type="button" onClick={onCancel}>
+
+        <div className='flex justify-end space-x-4'>
+          <Button variant='outline' type='button' onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Saving..." : isEditing ? "Update Class" : "Add Class"}
+          <Button type='submit' disabled={isSubmitting}>
+            {isSubmitting
+              ? 'Saving...'
+              : isEditing
+              ? 'Update Class'
+              : 'Add Class'}
           </Button>
         </div>
       </form>
     </Form>
-  );
+  )
 }

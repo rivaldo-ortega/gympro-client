@@ -19,6 +19,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { formatTime, getStatusColor } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import useTranslation from "@/hooks/use-translation";
 
 export default function Classes() {
   const { toast } = useToast();
@@ -26,6 +27,18 @@ export default function Classes() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedClass, setSelectedClass] = useState<any>(null);
   const [activeTab, setActiveTab] = useState("all");
+
+  const { t } = useTranslation();
+  
+  const daysOfWeekMap = [
+    {id: 'Monday', label: 'Lunes'},
+    {id: 'Tuesday', label: 'Martes'},
+    {id: 'Wednesday', label: 'Miercoles'},
+    {id: 'Thursday', label: 'Jueves'},
+    {id: 'Friday', label: 'Viernes'},
+    {id: 'Saturday', label: 'Sabado'},
+    {id: 'Sunday', label: 'Domingo'},
+  ]
 
   // Fetch all classes
   const { data: classes = [], isLoading: isLoadingClasses } = useQuery({
@@ -40,94 +53,103 @@ export default function Classes() {
 
   const columns = [
     {
-      header: "Class",
+      header: `${t('class')}`,
       accessorKey: (gymClass: any) => (
         <div>
-          <div className="font-medium">{gymClass.name}</div>
+          <div className='font-medium'>{gymClass.name}</div>
           {gymClass.description && (
-            <div className="text-sm text-gray-500 truncate max-w-xs">{gymClass.description}</div>
+            <div className='text-sm text-gray-500 truncate max-w-xs'>
+              {gymClass.description}
+            </div>
           )}
         </div>
       ),
     },
     {
-      header: "Time",
+      header: `${t('time')}`,
       accessorKey: (gymClass: any) => (
-        <div className="text-sm">
+        <div className='text-sm'>
           {formatTime(gymClass.startTime)} - {formatTime(gymClass.endTime)}
         </div>
       ),
     },
     {
-      header: "Days",
+      header: `${t('days')}`,
       accessorKey: (gymClass: any) => (
-        <div className="flex flex-wrap gap-1">
+        <div className='flex flex-wrap gap-1'>
           {gymClass.daysOfWeek.map((day: string) => (
-            <Badge key={day} variant="outline" className="text-xs">
-              {day.slice(0, 3)}
+            <Badge key={day} variant='outline' className='text-xs'>
+              {daysOfWeekMap.find((d) => d.id === day)?.label.slice(0, 3)}
             </Badge>
           ))}
         </div>
       ),
     },
     {
-      header: "Trainer",
+      header: `${t('trainer')}`,
       accessorKey: (gymClass: any) => (
-        <div className="flex items-center">
-          <Avatar className="h-8 w-8 mr-2">
-            <AvatarImage src={gymClass.trainer?.avatarUrl} alt={`${gymClass.trainer?.firstName} ${gymClass.trainer?.lastName}`} />
-            <AvatarFallback>{gymClass.trainer?.firstName?.[0] || "T"}</AvatarFallback>
+        <div className='flex items-center'>
+          <Avatar className='h-8 w-8 mr-2'>
+            <AvatarImage
+              src={gymClass.trainer?.avatarUrl}
+              alt={`${gymClass.trainer?.firstName} ${gymClass.trainer?.lastName}`}
+            />
+            <AvatarFallback>
+              {gymClass.trainer?.firstName?.[0] || 'T'}
+            </AvatarFallback>
           </Avatar>
-          <div className="text-sm">
+          <div className='text-sm'>
             {gymClass.trainer?.firstName} {gymClass.trainer?.lastName}
           </div>
         </div>
       ),
     },
     {
-      header: "Room",
+      header: `${t('room')}`,
       accessorKey: (gymClass: any) => gymClass.room,
     },
     {
-      header: "Capacity",
+      header: `${t('capacity')}`,
       accessorKey: (gymClass: any) => gymClass.capacity,
     },
     {
-      header: "Status",
+      header: `${t('status')}`,
       accessorKey: (gymClass: any) => (
-        <Badge className={getStatusColor(gymClass.isActive ? "active" : "inactive")}>
-          {gymClass.isActive ? "Active" : "Inactive"}
+        <Badge
+          className={getStatusColor(gymClass.isActive ? 'active' : 'inactive')}
+        >
+          {gymClass.isActive ? 'Active' : 'Inactive'}
         </Badge>
       ),
     },
     {
-      header: "Actions",
+      header: `${t('actions')}`,
       accessorKey: (gymClass: any) => (
-        <div className="flex space-x-2">
+        <div className='flex space-x-2'>
           <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEdit(gymClass);
+            variant='ghost'
+            size='sm'
+            onClick={e => {
+              e.stopPropagation()
+              handleEdit(gymClass)
             }}
           >
-            <PencilIcon className="h-4 w-4" />
+            <PencilIcon className='h-4 w-4' />
           </Button>
           <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(gymClass);
+            variant='ghost'
+            size='sm'
+            onClick={e => {
+              e.stopPropagation()
+              handleDelete(gymClass)
             }}
           >
-            <Trash2Icon className="h-4 w-4" />
+            <Trash2Icon className='h-4 w-4' />
           </Button>
         </div>
       ),
     },
-  ];
+  ]
 
   const todayColumns = [
     ...columns.slice(0, 1), // Class name
@@ -191,46 +213,46 @@ export default function Classes() {
   };
 
   return (
-    <div className="py-6 md:py-8 px-4 sm:px-6 lg:px-8">
+    <div className='py-6 md:py-8 px-4 sm:px-6 lg:px-8'>
       <PageHeader
-        title="Class Schedule"
-        description="Manage your gym classes and schedule"
+        title={t('classSchedule')}
+        description='Manage your gym classes and schedule'
         actions={
           <Button onClick={handleAdd}>
-            <PlusCircle className="h-4 w-4 mr-2" />
-            Add Class
+            <PlusCircle className='h-4 w-4 mr-2' />
+            {t('addClass')}
           </Button>
         }
       />
 
-      <Tabs 
-        defaultValue="all" 
-        value={activeTab} 
+      <Tabs
+        defaultValue='all'
+        value={activeTab}
         onValueChange={setActiveTab}
-        className="mt-6"
+        className='mt-6'
       >
         <TabsList>
-          <TabsTrigger value="all">All Classes</TabsTrigger>
-          <TabsTrigger value="today">Today's Classes</TabsTrigger>
+          <TabsTrigger value='all'>{t('allClasses')}</TabsTrigger>
+          <TabsTrigger value='today'>{t('todayClasses')}</TabsTrigger>
         </TabsList>
-        
-        <TabsContent value="all">
+
+        <TabsContent value='all'>
           <Card>
             <DataTable
               columns={columns}
               data={classes}
-              searchKey="name"
+              searchKey='name'
               isLoading={isLoadingClasses}
             />
           </Card>
         </TabsContent>
-        
-        <TabsContent value="today">
+
+        <TabsContent value='today'>
           <Card>
             <DataTable
               columns={todayColumns}
               data={todayClasses}
-              searchKey="name"
+              searchKey='name'
               isLoading={isLoadingClasses}
             />
           </Card>
@@ -239,10 +261,10 @@ export default function Classes() {
 
       {/* Class form dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className='sm:max-w-[800px] max-h-[90vh] overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>
-              {selectedClass ? "Edit Class" : "Add New Class"}
+              {selectedClass ? 'Edit Class' : 'Add New Class'}
             </DialogTitle>
           </DialogHeader>
           <ClassForm
@@ -254,23 +276,29 @@ export default function Classes() {
       </Dialog>
 
       {/* Delete confirmation dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the "{selectedClass?.name}" class
-              and all associated bookings. This action cannot be undone.
+              This will permanently delete the "{selectedClass?.name}" class and
+              all associated bookings. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-red-500 hover:bg-red-600">
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className='bg-red-500 hover:bg-red-600'
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  );
+  )
 }

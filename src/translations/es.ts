@@ -1,5 +1,3 @@
-import {add} from 'date-fns'
-import {PersonStanding} from 'lucide-react'
 
 const translations: Record<string, string> = {
   // Posted date format
@@ -44,7 +42,7 @@ const translations: Record<string, string> = {
   statusCancelled: 'Cancelado',
   statusVerified: 'Verificado',
   statusRejected: 'Rechazado',
-
+  'statusAbout-expire': 'Por vencer',
   // Payments page
   paymentsTitle: 'Gestión de Pagos',
   paymentsDescription:
@@ -283,6 +281,26 @@ const translations: Record<string, string> = {
   class: 'Clases',
   bookingDate: 'Fecha de Reserva',
   addBooking: 'Añadir Reserva',
+  attendance: 'Asistencia',
+  date: 'Fecha',
+  attended: 'Asistió',
+  overview: 'Resumen',
+  activity: 'Actividad',
+  planName: 'Nombre del Plan',
+  duration: 'Duración',
+  durationType: 'Tipo de Duración',
+  description: 'Descripción',
+  planFeatures: 'Características del Plan',
+  activeStatus: 'Estado Activo',
+  price: 'Precio',
+  classSchedule: 'Horario de Clases',
+  addClass: 'Añadir Clase',
+  todayClasses: 'Clases de Hoy',
+  className: 'Nombre de la Clase',
+  startTime: 'Hora de Inicio',
+  endTime: 'Hora de Fin',
+  daysOfTheWeek: 'Días de la Semana',
+  days: 'Días',
 }
 
 export default translations
