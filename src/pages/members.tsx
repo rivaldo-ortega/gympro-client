@@ -21,12 +21,15 @@ import { getStatusColor, formatDate, getInitials } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useTranslation } from "@/hooks/use-translation";
+import { BookingForm } from "@/components/members/member-booking-form";
+import moment from "moment";
 
 export default function Members() {
   const { toast } = useToast();
   const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isBookingFormOpen, setIsBookingFormOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState<any>(null);
   const [filters, setFilters] = useState<{ status?: string; planId?: number }>({});
@@ -61,15 +64,19 @@ export default function Members() {
     {
       header: t('name'),
       accessorKey: (member: any) => (
-        <div className="flex items-center">
-          <Avatar className="h-10 w-10 mr-3">
+        <div className='flex items-center'>
+          <Avatar className='h-10 w-10 mr-3'>
             {/* Comentado para usar siempre iniciales */}
             {/* <AvatarImage src={member.avatarUrl} alt={`${member.firstName} ${member.lastName}`} /> */}
-            <AvatarFallback>{getInitials(`${member.firstName} ${member.lastName}`)}</AvatarFallback>
+            <AvatarFallback>
+              {getInitials(`${member.firstName} ${member.lastName}`)}
+            </AvatarFallback>
           </Avatar>
           <div>
-            <div className="font-medium">{member.firstName} {member.lastName}</div>
-            <div className="text-sm text-gray-500">{member.email}</div>
+            <div className='font-medium'>
+              {member.firstName} {member.lastName}
+            </div>
+            <div className='text-sm text-gray-500'>{member.email}</div>
           </div>
         </div>
       ),
@@ -78,8 +85,12 @@ export default function Members() {
       header: t('membership'),
       accessorKey: (member: any) => (
         <div>
-          <div className="text-sm font-medium text-gray-900">{member.plan?.name || t('unknown')}</div>
-          <div className="text-sm text-gray-500">{member.plan?.durationType || ""}</div>
+          <div className='text-sm font-medium text-gray-900'>
+            {member.plan?.name || t('unknown')}
+          </div>
+          <div className='text-sm text-gray-500'>
+            {member.plan?.durationType || ''}
+          </div>
         </div>
       ),
     },
@@ -87,14 +98,18 @@ export default function Members() {
       header: t('status'),
       accessorKey: (member: any) => (
         <Badge className={getStatusColor(member.status)}>
-          {t(`status${member.status.charAt(0).toUpperCase() + member.status.slice(1)}`)}
+          {t(
+            `status${
+              member.status.charAt(0).toUpperCase() + member.status.slice(1)
+            }`,
+          )}
         </Badge>
       ),
     },
     {
       header: t('joinDate'),
       accessorKey: (member: any) => (
-        <span className="text-sm text-gray-500">
+        <span className='text-sm text-gray-500'>
           {formatDate(member.joinDate)}
         </span>
       ),
@@ -102,46 +117,54 @@ export default function Members() {
     {
       header: t('actions'),
       accessorKey: (member: any) => (
-        <div className="flex space-x-2">
+        <div className='flex space-x-2'>
           <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleEdit(member);
+            variant='ghost'
+            size='sm'
+            onClick={e => {
+              e.stopPropagation()
+              handleEdit(member)
             }}
           >
-            <PencilIcon className="h-4 w-4" />
+            <PencilIcon className='h-4 w-4' />
           </Button>
           <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleView(member);
+            variant='ghost'
+            size='sm'
+            onClick={e => {
+              e.stopPropagation()
+              handleView(member)
             }}
           >
-            <EyeIcon className="h-4 w-4" />
+            <EyeIcon className='h-4 w-4' />
           </Button>
           <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDelete(member);
+            variant='ghost'
+            size='sm'
+            onClick={e => {
+              e.stopPropagation()
+              handleDelete(member)
             }}
           >
-            <Trash2Icon className="h-4 w-4" />
+            <Trash2Icon className='h-4 w-4' />
           </Button>
         </div>
       ),
     },
-  ];
+  ]
 
   const handleAdd = () => {
     setSelectedMember(null);
     setIsFormOpen(true);
   };
+
+  const handleAddBooking = () => {
+    setIsBookingFormOpen(true);
+  };
+
+  const handleCloseBookingForm = () => {
+    setIsBookingFormOpen(false);
+  }
 
   const handleEdit = (member: any) => {
     setSelectedMember(member);
@@ -193,26 +216,32 @@ export default function Members() {
   };
 
   return (
-    <div className="py-6 md:py-8 px-4 sm:px-6 lg:px-8">
+    <div className='py-6 md:py-8 px-4 sm:px-6 lg:px-8'>
       <PageHeader
         title={t('members')}
         description={t('membersDescription')}
         actions={
-          <Button onClick={handleAdd}>
-            <UserPlus className="h-4 w-4 mr-2" />
-            {t('addMember')}
-          </Button>
+          <div className='flex space-x-3'>
+            <Button onClick={handleAdd}>
+              <UserPlus className='h-4 w-4 mr-2' />
+              {t('addMember')}
+            </Button>
+            <Button onClick={handleAddBooking}>
+              <UserPlus className='h-4 w-4 mr-2' />
+              {t('booking')}
+            </Button>
+          </div>
         }
       />
 
-      <div className="mt-6">
-        <MemberFilter 
-          onFilterChange={handleFilterChange} 
-          plans={plans as any[]} 
+      <div className='mt-6'>
+        <MemberFilter
+          onFilterChange={handleFilterChange}
+          plans={plans as any[]}
         />
       </div>
 
-      <Card className="mt-6">
+      <Card className='mt-6'>
         <DataTable
           columns={columns}
           data={filteredMembers}
@@ -224,7 +253,7 @@ export default function Members() {
 
       {/* Member form dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className='sm:max-w-[800px] max-h-[90vh] overflow-y-auto'>
           <DialogHeader>
             <DialogTitle>
               {selectedMember ? t('editMember') : t('addNewMember')}
@@ -237,25 +266,49 @@ export default function Members() {
           />
         </DialogContent>
       </Dialog>
+      <Dialog open={isBookingFormOpen} onOpenChange={setIsBookingFormOpen}>
+        <DialogContent className='sm:max-w-[800px] max-h-[90vh] overflow-y-auto'>
+          <DialogHeader>
+            <DialogTitle>
+              {selectedMember ? t('editMember') : t('addBooking')}
+            </DialogTitle>
+          </DialogHeader>
+          <BookingForm
+            initialData={null}
+            onSuccess={handleCloseBookingForm}
+            onCancel={handleCloseBookingForm}
+          />
+        </DialogContent>
+      </Dialog>
 
       {/* Delete confirmation dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t('areYouSure')}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t('deleteConfirmationDescription').replace('{name}', 
-                selectedMember ? `${selectedMember.firstName} ${selectedMember.lastName}` : '')}
+              {t('deleteConfirmationDescription').replace(
+                '{name}',
+                selectedMember
+                  ? `${selectedMember.firstName} ${selectedMember.lastName}`
+                  : '',
+              )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-red-500 hover:bg-red-600">
+            <AlertDialogAction
+              onClick={handleDeleteConfirm}
+              className='bg-red-500 hover:bg-red-600'
+            >
               {t('delete')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  );
+  )
 }

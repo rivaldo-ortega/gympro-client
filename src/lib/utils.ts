@@ -1,4 +1,5 @@
 import {type ClassValue, clsx} from 'clsx'
+import moment from 'moment'
 import {twMerge} from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -7,23 +8,28 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatCurrency(amount: number): string {
   // Convert from cents to dollars
-  const dollars = amount
-  return new Intl.NumberFormat('en-US', {
+
+  return new Intl.NumberFormat('es-PE', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'PEN',
     minimumFractionDigits: 2,
-  }).format(dollars)
+  }).format(amount)
 }
 
 export function formatPercentage(value: number): string {
   return `${Math.round(value)}%`
 }
 
-export function formatDate(date: string | Date): string {
-  return new Date(date).toLocaleDateString('en-US', {
+
+export function formatDate(date: string): string {
+  if (!date) {
+    return 'N/A'
+  }
+
+  return new Date(moment(date).toString()).toLocaleString('es-ES', {
     year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+    month: 'long',
+    day: '2-digit',
   })
 }
 

@@ -35,7 +35,7 @@ import {
   XCircle,
   Info,
 } from 'lucide-react'
-import {formatCurrency} from '@/lib/utils'
+import {formatCurrency, formatDate} from '@/lib/utils'
 
 interface MemberProfileData {
   member: {
@@ -230,10 +230,10 @@ export default function MemberProfilePage() {
     }
   }
 
-  const formatDate = (dateString: string | null) => {
+  /* const formatDate = (dateString: string | null) => {
     if (!dateString) return 'N/A'
     return new Date(dateString).toLocaleDateString()
-  }
+  } */
 
   const getInitials = (firstName: string, lastName: string) => {
     return `${firstName[0]}${lastName[0]}`.toUpperCase()
@@ -249,18 +249,6 @@ export default function MemberProfilePage() {
 
       {/* Header / Profile Summary */}
       <div className='flex flex-col md:flex-row gap-6 mb-6'>
-        <div className='flex items-center gap-4'>
-          <Avatar className='h-20 w-20 border-4 border-muted'>
-            <AvatarImage
-              src={member.avatarUrl || undefined}
-              alt={`${member.firstName} ${member.lastName}`}
-            />
-            <AvatarFallback className='text-xl'>
-              {getInitials(member.firstName, member.lastName)}
-            </AvatarFallback>
-          </Avatar>
-        </div>
-
         <div className='flex-1'>
           <div className='flex items-center gap-3 mb-2'>
             <h1 className='text-3xl font-bold'>
@@ -300,7 +288,7 @@ export default function MemberProfilePage() {
           <div className='text-sm text-muted-foreground flex items-center gap-2'>
             <Calendar size={16} /> {t('expiresOn')}:{' '}
             <span className='font-medium text-foreground'>
-              {formatDate(member.expiryDate)}
+              {formatDate(member.expiryDate || '')}
             </span>
           </div>
         </div>
